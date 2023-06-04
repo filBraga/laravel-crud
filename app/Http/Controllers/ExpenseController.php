@@ -6,16 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Expense;
 
+use App\Http\Requests\ExpenseStoreRequest;
+
 class ExpenseController extends Controller
 {
-    public function store(Request $request)
+    public function store(ExpenseStoreRequest $request)
     {
-        $validated = $request->validate([
-            'description' => 'required|max:191',
-            'date' => 'required|date|before_or_equal:today',
-            'amount' => 'required|numeric|min:0',
-        ]);
-
         $expense = new Expense;
         $expense->description = $request->description;
         $expense->date = $request->date;

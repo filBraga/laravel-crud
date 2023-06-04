@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expense extends Model
 {
+    protected $policy = ExpensePolicy::class;
+
     use HasFactory;
 
     // Specify the table name if it differs from "expenses"

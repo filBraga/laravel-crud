@@ -1,3 +1,5 @@
+use App\Models\Expense;
+
 @extends('layouts.app')
 
 @section('content')
@@ -16,6 +18,14 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+
+                @foreach($expenses as $expense)
+                    <div>
+                        <p>Description: {{ $expense->description }}</p>
+                        <p>Date: {{ $expense->date }}</p>
+                        <p>Amount: {{ $expense->amount }}</p>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

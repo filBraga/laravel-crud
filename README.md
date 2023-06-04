@@ -7,60 +7,106 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. Clone the repository
+    ```
+    git clone https://github.com/filBraga/laravel-crud
+    ```
+2. Install PHP dependencies
+    ```
+    composer install && npm install
+    ```
+3. Create and set up your `.env` file, then run migrations
+    ```
+    php artisan migrate
+    ```
+4. Run seed
+    ```
+    php artisan seed
+    ```
+5. Run the application
+    ```
+    php artisan serve
+    ```
+    and
+    ```
+    npm run dev
+    ```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+extra: For login:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    'email' => 'john@example.com',
+    'password' => 'password',
 
-## Learning Laravel
+    or
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    'email' => 'jane@example.com',
+    'password' => 'password',
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Test
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Run the tests
+    ```
+    php artisan test
+    ```
 
-## Laravel Sponsors
+## Usage
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+You need to register and log in to use the application. Once logged in, you can create, view, edit, and delete expenses from the home page.
 
-### Premium Partners
+Expenses have 'description', 'date', 'amount' and 'user_id'
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Model:
 
-## Contributing
+    ```
+    // Expense.php
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    protected $fillable = [
+        'description',
+        'date',
+        'amount',
+        'user_id',
+    ];
+    ```
 
-## Code of Conduct
+Validations:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```
+    // ExpenseStoreRequest.php
 
-## Security Vulnerabilities
+    'description' => 'required|max:191',
+    'date' => 'required|date|before_or_equal:today',
+    'amount' => 'required|numeric|min:0',
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Policy access:
 
-## License
+    ```
+    // ExpenseController.php
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    $this->authorize('create', Expense::class);
+    $this->authorize('viewAny', Expense::class);
+    $this->authorize('update', $expense);
+    $this->authorize('update', $expense);
+    $this->authorize('delete', $expense);
+
+    // ExpensePolicy.php
+
+    return $user->id === $expense->user_id;
+    ```
+
+Email not implemented:
+
+    ```
+    // ExpenseController.php
+
+    // Send an email to the user
+    // \Mail::to(Auth::user()->email)->send(new ExpenseRegistered($expense));
+    ```
+
+## Features
+
+-   User registration and authentication
+-   Creating, viewing, updating, and deleting expenses
+-   View list of all expenses for a user

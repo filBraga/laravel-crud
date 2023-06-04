@@ -24,7 +24,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/home', [ExpenseController::class, 'index'])->name('home');
 
-Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
 Route::get('/expenses/{expense}/edit', [ExpenseController::class, 'edit'])->name('expenses.edit');
-Route::put('/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
-Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+// Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+// Route::put('/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+// Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
+Route::apiResource('/expenses', ExpenseController::class);

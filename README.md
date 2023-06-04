@@ -15,7 +15,7 @@
     ```
 2. Install PHP dependencies
     ```
-    composer install
+    composer install && npm install
     ```
 3. Create and set up your `.env` file, then run migrations
     ```

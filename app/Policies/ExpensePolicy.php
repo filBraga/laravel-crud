@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Expense;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ExpensePolicy
 {
@@ -13,7 +12,8 @@ class ExpensePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        // Allow any authenticated user to view any expense
+        return true;
     }
 
     /**
@@ -21,7 +21,8 @@ class ExpensePolicy
      */
     public function view(User $user, Expense $expense): bool
     {
-        //
+        // Allow any authenticated user to view the expense
+        return true;
     }
 
     /**
@@ -29,7 +30,8 @@ class ExpensePolicy
      */
     public function create(User $user): bool
     {
-        //
+        // Allow any authenticated user to create an expense
+        return true;
     }
 
     /**
@@ -37,6 +39,7 @@ class ExpensePolicy
      */
     public function update(User $user, Expense $expense): bool
     {
+        // Only allow the user who owns the expense to update it
         return $user->id === $expense->user_id;
     }
 
@@ -45,7 +48,8 @@ class ExpensePolicy
      */
     public function delete(User $user, Expense $expense): bool
     {
-        //
+        // Only allow the user who owns the expense to delete it
+        return $user->id === $expense->user_id;
     }
 
     /**
@@ -53,7 +57,8 @@ class ExpensePolicy
      */
     public function restore(User $user, Expense $expense): bool
     {
-        //
+        // Allow any authenticated user to restore an expense
+        return true;
     }
 
     /**
@@ -61,6 +66,7 @@ class ExpensePolicy
      */
     public function forceDelete(User $user, Expense $expense): bool
     {
-        //
+        // Allow any authenticated user to permanently delete an expense
+        return true;
     }
 }

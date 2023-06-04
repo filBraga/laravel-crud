@@ -21,7 +21,11 @@
     ```
     php artisan migrate
     ```
-4. Run the application
+4. Run seed
+    ```
+    php artisan seed
+    ```
+5. Run the application
     ```
     php artisan serve
     ```
@@ -30,9 +34,76 @@
     npm run dev
     ```
 
+extra: For login:
+
+    'email' => 'john@example.com',
+    'password' => 'password',
+
+    or
+
+    'email' => 'jane@example.com',
+    'password' => 'password',
+
+## Test
+
+1. Run the tests
+    ```
+    php artisan test
+    ```
+
 ## Usage
 
 You need to register and log in to use the application. Once logged in, you can create, view, edit, and delete expenses from the home page.
+
+Expenses have 'description', 'date', 'amount' and 'user_id'
+
+Model:
+
+    ```
+    // Expense.php
+
+    protected $fillable = [
+        'description',
+        'date',
+        'amount',
+        'user_id',
+    ];
+    ```
+
+Validations:
+
+    ```
+    // ExpenseStoreRequest.php
+
+    'description' => 'required|max:191',
+    'date' => 'required|date|before_or_equal:today',
+    'amount' => 'required|numeric|min:0',
+    ```
+
+Policy access:
+
+    ```
+    // ExpenseController.php
+
+    $this->authorize('create', Expense::class);
+    $this->authorize('viewAny', Expense::class);
+    $this->authorize('update', $expense);
+    $this->authorize('update', $expense);
+    $this->authorize('delete', $expense);
+
+    // ExpensePolicy.php
+
+    return $user->id === $expense->user_id;
+    ```
+
+Email not implemented:
+
+    ```
+    // ExpenseController.php
+
+    // Send an email to the user
+    // \Mail::to(Auth::user()->email)->send(new ExpenseRegistered($expense));
+    ```
 
 ## Features
 
